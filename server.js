@@ -5,31 +5,39 @@ require('dotenv').config();
 
 const app = express();
 
-// Enable CORS for local development (restrict to frontend origin)
+// Define multiple allowed origins
+const allowedOrigins = [
+  'https://expense-mern-stack-frontend.vercel.app',  // First allowed origin
+  'http://localhost:3000',         // Second allowed origin (example)
+];
+
 app.use(cors({
-  origin: 'https://expense-mern-stack-frontend.vercel.app', // Allow only localhost:3000
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed methods
-  allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
-  credentials: true, // Allow cookies/auth headers if needed
+  origin: (origin, callback) => {
+    // Check if the origin is in the allowedOrigins array
+    if (allowedOrigins.includes(origin) || !origin) { // !origin is to allow non-browser requests (e.g., Postman)
+      callback(null, true);
+    } else {
+      callback(new Error('CORS policy: Origin not allowed'), false);
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true, // If you are using cookies for authentication
 }));
 
 app.use(express.json());
 
-// Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log('MongoDB connected');
-    // Create TTL index for Otp model (expires after 5 minutes)
     mongoose.connection.db.collection('otps').createIndex({ createdAt: 1 }, { expireAfterSeconds: 300 });
   })
   .catch(err => console.error('MongoDB connection error:', err));
 
-// API routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/expenses', require('./routes/expenses'));
 app.use('/api/incomes', require('./routes/incomes'));
 
-// Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ message: 'Something went wrong!' });
