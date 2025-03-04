@@ -7,21 +7,10 @@ const app = express();
 
 // Enable CORS for local development (restrict to frontend origin)
 app.use(cors({
-  origin: (origin, callback) => {
-    const allowedOrigins = [
-      'https://expense-mern-stack-frontend.vercel.app',
-      'https://expense-mern-stack-frontend.vercel.app/'
-    ];
-    
-    if (allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('CORS policy: Origin not allowed'));
-    }
-  },
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true, // If you are using cookies for authentication
+  origin: 'https://expense-mern-stack-frontend.vercel.app', // Allow only localhost:3000
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed methods
+  allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
+  credentials: true, // Allow cookies/auth headers if needed
 }));
 
 app.use(express.json());
