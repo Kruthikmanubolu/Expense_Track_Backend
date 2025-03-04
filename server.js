@@ -7,7 +7,7 @@ const app = express();
 
 // Enable CORS for local development (restrict to frontend origin)
 app.use(cors({
-  origin: 'http://localhost:3000', // Allow only localhost:3000
+  origin: 'https://expense-mern-stack-frontend.vercel.app/', // Allow only localhost:3000
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed methods
   allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
   credentials: true, // Allow cookies/auth headers if needed
