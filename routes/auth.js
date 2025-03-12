@@ -7,7 +7,7 @@ const nodemailer = require('nodemailer');
 const Otp = require('../models/Otp'); 
 
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.{8,})/;
-const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/; 
+const emailRegex = /^[a-zA-Z0-9._%+-]+@(gmail\.com|oregonstate\.edu)$/;
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',

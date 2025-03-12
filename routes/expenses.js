@@ -17,9 +17,10 @@ router.post('/', auth, async (req, res) => {
   try {
     const expense = new Expense({ userId: req.user.id, description, amount, category });
     await expense.save();
+    return res.status(201).json({ message: "Expense added successfully!" });
     res.json(expense);
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    return res.status(500).json({ message: 'Server error' });
   }
 });
 
